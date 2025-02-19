@@ -27,12 +27,17 @@ class Betting(
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    val status: BettingStatus,
+    var status: BettingStatus,
 
     @Column(name = "created_at", nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
 ) {
+
+    fun cancel() {
+        status = BettingStatus.CANCELLED
+    }
+
     companion object {
 
         fun of(matchId: Long, studentId: Long, point: Long, predictedWinTeamId: Long) = Betting(
