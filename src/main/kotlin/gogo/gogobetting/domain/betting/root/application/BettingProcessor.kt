@@ -10,7 +10,6 @@ class BettingProcessor(
     private val bettingRepository: BettingRepository
 ) {
 
-    fun save(matchId: Long, studentId: Long, dto: BettingDto): Betting {
         val betting = Betting.of(
             matchId = matchId,
             studentId = studentId,
@@ -18,7 +17,6 @@ class BettingProcessor(
             predictedWinTeamId = dto.predictedWinTeamId,
         )
 
-        return bettingRepository.save(betting)
     }
 
 }
