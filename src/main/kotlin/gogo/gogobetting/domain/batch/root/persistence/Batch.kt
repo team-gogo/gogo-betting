@@ -12,9 +12,6 @@ class Batch(
     @Column(name = "id", nullable = false)
     val id: Long,
 
-    @Column(name = "game_id", nullable = false)
-    val gameId: Long,
-
     @Column(name = "match_id", nullable = false)
     val matchId: Long,
 
