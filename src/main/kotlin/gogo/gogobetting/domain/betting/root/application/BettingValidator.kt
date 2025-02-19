@@ -16,7 +16,7 @@ class BettingValidator(
             bettingRepository.existsByMatchIdAndStudentIdAndStatus(matchId, studentId, BettingStatus.CONFIRMED)
 
         if (isBet) {
-            throw BettingException("해당 매치에 이미 배팅하였습니다.", HttpStatus.BAD_REQUEST.value())
+            throw BettingException("This Match Already Betting, match id = $matchId", HttpStatus.BAD_REQUEST.value())
         }
     }
 
