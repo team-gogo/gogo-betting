@@ -46,7 +46,7 @@ class SecurityConfig(
             httpRequests.requestMatchers(HttpMethod.GET, "/betting/health").permitAll()
 
             // betting
-            httpRequests.requestMatchers(HttpMethod.POST, "/betting/{match_id}").hasAnyAuthority(Authority.USER.name, Authority.STAFF.name)
+            httpRequests.requestMatchers(HttpMethod.POST, "/betting/{match_id}").hasAnyRole(Authority.USER.name, Authority.STAFF.name)
 
             httpRequests.anyRequest().denyAll()
         }
