@@ -28,6 +28,7 @@ repositories {
 extra["springCloudVersion"] = "2024.0.0"
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-batch")
     implementation("org.springframework.kafka:spring-kafka")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")

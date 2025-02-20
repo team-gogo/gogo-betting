@@ -11,7 +11,7 @@ class BettingResult(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    val id: Long,
+    val id: Long = 0,
 
     @JoinColumn(name = "betting_id", nullable = false)
     @OneToOne(cascade = [(CascadeType.ALL)], fetch = FetchType.LAZY)
@@ -23,4 +23,14 @@ class BettingResult(
     @Column(name = "earned_point", nullable = false)
     val earnedPoint: Long
 
-)
+) {
+    companion object {
+
+        fun of(betting: Betting, earnedPoint: Long, isPredicted: Boolean) = BettingResult(
+            betting = betting,
+            isPredicted = predicted,
+            earnedPoint = earnedPoint
+        )
+
+    }
+}

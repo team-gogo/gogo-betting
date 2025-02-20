@@ -11,7 +11,7 @@ class BatchDetail(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    val id: Long,
+    val id: Long = 0,
 
     @JoinColumn(name = "batch_id", nullable = false)
     @OneToOne(cascade = [(CascadeType.ALL)], fetch = FetchType.LAZY)
@@ -26,4 +26,15 @@ class BatchDetail(
     @JoinColumn(name = "b_team_score", nullable = false)
     val bTeamScore: Int,
 
-)
+) {
+    companion object {
+
+        fun of(batch: Batch, victoryTeamId: Long, aTeamScore: Int, bTeamScore: Int) = BatchDetail(
+            batch = batch,
+            victoryTeamId = victoryTeamId,
+            aTeamScore = aTeamScore,
+            bTeamScore = bTeamScore
+        )
+
+    }
+}
