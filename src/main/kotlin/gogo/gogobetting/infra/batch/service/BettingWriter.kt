@@ -9,13 +9,15 @@ import gogo.gogobetting.domain.batch.root.persistence.BatchRepository
 import gogo.gogobetting.domain.betting.result.persistence.BettingResult
 import gogo.gogobetting.domain.betting.result.persistence.BettingResultRepository
 import org.springframework.batch.core.StepExecution
+import org.springframework.batch.core.configuration.annotation.StepScope
 import org.springframework.batch.item.Chunk
 import org.springframework.batch.item.ItemWriter
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.util.*
 
-@Component
+@Component("batchBettingWriter")
+@StepScope
 class BettingWriter(
     private val bettingResultRepository: BettingResultRepository,
     private val batchRepository: BatchRepository,

@@ -28,7 +28,7 @@ class BettingResult(
 
         fun of(betting: Betting, earnedPoint: Long, isPredicted: Boolean) = BettingResult(
             betting = betting,
-            isPredicted = predicted,
+            isPredicted = isPredicted,
             earnedPoint = earnedPoint
         )
 

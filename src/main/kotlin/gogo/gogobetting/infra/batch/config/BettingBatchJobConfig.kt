@@ -10,8 +10,8 @@ import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing
-import org.springframework.batch.core.configuration.annotation.JobScope
 import org.springframework.batch.core.configuration.annotation.StepScope
+import org.springframework.batch.core.configuration.annotation.JobScope
 import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.builder.StepBuilder
 import org.springframework.batch.item.ItemReader
@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
+import org.springframework.batch.core.StepExecution
 
 @Configuration
 @EnableBatchProcessing
@@ -41,26 +42,28 @@ class BettingBatchJobConfig(
     }
 
     @Bean
-    @JobScope
     fun bettingStep(
         jobRepository: JobRepository,
-        transactionManager: PlatformTransactionManager
+        transactionManager: PlatformTransactionManager,
     ): Step {
         return StepBuilder("bettingStep", jobRepository)
             .chunk<Betting, BettingResult>(50)
             .reader(bettingReader(null))
             .processor(bettingProcessor)
             .writer(bettingWriter)
+            .transactionManager(transactionManager)
             .build()
     }
 
     @Bean
     @StepScope
     fun bettingReader(
-        @Value("#{jobParameters['matchId']}") matchId: Long?,
+        @Value("#{jobParameters['matchId']}") matchId: Long?
     ): ItemReader<Betting> {
+        val validMatchId = matchId ?: throw IllegalArgumentException("matchId is required")
         return ItemReader {
-            matchId?.let { bettingRepository.findByMatchId(it).iterator().next() }
+            val bettingIterator = bettingRepository.findByMatchId(validMatchId).iterator()
+            if (bettingIterator.hasNext()) bettingIterator.next() else null
         }
     }
 }
