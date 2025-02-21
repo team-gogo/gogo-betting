@@ -9,6 +9,9 @@ eureka:
     serviceUrl:
       defaultZone: http://${EUREKA_HOSTNAME:localhost}:8761/eureka/
 spring:
+#  sql:
+#    init:
+#      mode: always
   application:
     name: gogo-betting
   main:

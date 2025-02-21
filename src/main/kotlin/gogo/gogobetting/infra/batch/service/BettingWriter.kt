@@ -4,15 +4,18 @@ import gogo.gogobetting.domain.batch.detail.persistence.BatchDetail
 import gogo.gogobetting.domain.batch.detail.persistence.BatchDetailRepository
 import gogo.gogobetting.domain.batch.root.event.BettingBatchEvent
 import gogo.gogobetting.domain.batch.root.event.StudentBettingDto
-import gogo.gogobetting.domain.batch.root.persistence.Batch
 import gogo.gogobetting.domain.batch.root.persistence.BatchRepository
 import gogo.gogobetting.domain.betting.result.persistence.BettingResult
 import gogo.gogobetting.domain.betting.result.persistence.BettingResultRepository
+import gogo.gogobetting.domain.betting.root.persistence.BettingRepository
+import org.springframework.batch.core.JobExecution
 import org.springframework.batch.core.StepExecution
+import org.springframework.batch.core.annotation.BeforeStep
 import org.springframework.batch.core.configuration.annotation.StepScope
 import org.springframework.batch.item.Chunk
 import org.springframework.batch.item.ItemWriter
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -20,11 +23,10 @@ import java.util.*
 @StepScope
 class BettingWriter(
     private val bettingResultRepository: BettingResultRepository,
-    private val batchRepository: BatchRepository,
     private val batchDetailRepository: BatchDetailRepository,
+    private val batchRepository: BatchRepository,
+    private val bettingRepository: BettingRepository,
 ) : ItemWriter<BettingResult> {
-
-    lateinit var stepExecution: StepExecution
 
     @Value("#{jobParameters['matchId']}")
     private val matchId: Long = 0
@@ -38,25 +40,31 @@ class BettingWriter(
     @Value("#{jobParameters['bTeamScore']}")
     private val bTeamScore: Int = 0
 
+    private var batchId: Long = 0
+
+    @BeforeStep
+    fun beforeStep(stepExecution: StepExecution) {
+        val jobExecution = stepExecution.jobExecution
+        batchId = jobExecution.executionContext["batchId"]!! as Long
+    }
+
     override fun write(items: Chunk<out BettingResult>) {
         bettingResultRepository.saveAll(items)
 
-        val batch = stepExecution.executionContext["batch"] as Batch
+        val batch = batchRepository.findByIdOrNull(batchId)!!
 
-        batch.let {
-            batchDetailRepository.save(
-                BatchDetail.of(
-                    batch = it,
-                    victoryTeamId = winTeamId,
-                    aTeamScore = aTeamScore,
-                    bTeamScore = bTeamScore
-                )
+        batchDetailRepository.save(
+            BatchDetail.of(
+                batchId = batch.id,
+                victoryTeamId = winTeamId,
+                aTeamScore = aTeamScore,
+                bTeamScore = bTeamScore
             )
-        }
+        )
 
         val successList = items.filter { it.isPredicted }
             .map { StudentBettingDto(
-                    it.betting.studentId,
+                    bettingRepository.findByIdOrNull(it.bettingId)!!.id,
                     it.earnedPoint
                 )
             }

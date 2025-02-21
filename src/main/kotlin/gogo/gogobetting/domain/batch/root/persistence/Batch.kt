@@ -21,16 +21,20 @@ class Batch(
     @Column(name = "start_time", nullable = false)
     val startTime: LocalDateTime,
 
-    @Column(name = "end_time", nullable = false)
+    @Column(name = "end_time", nullable = true)
     var endTime: LocalDateTime?,
 
     @Column(name = "is_cancelled", nullable = false)
-    val isCancelled: Boolean,
+    var isCancelled: Boolean,
 
 ) {
 
     fun updateEndTime() {
         this.endTime = LocalDateTime.now()
+    }
+
+    fun failed() {
+        this.isCancelled = true
     }
 
     companion object {

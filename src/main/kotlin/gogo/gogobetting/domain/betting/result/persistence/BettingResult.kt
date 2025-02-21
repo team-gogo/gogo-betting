@@ -13,9 +13,8 @@ class BettingResult(
     @Column(name = "id", nullable = false)
     val id: Long = 0,
 
-    @JoinColumn(name = "betting_id", nullable = false)
-    @OneToOne(cascade = [(CascadeType.ALL)], fetch = FetchType.LAZY)
-    val betting: Betting,
+    @JoinColumn(name = "betting_id", nullable = false, unique = true)
+    val bettingId: Long,
 
     @Column(name = "is_predicted", nullable = false)
     val isPredicted: Boolean,
@@ -26,8 +25,8 @@ class BettingResult(
 ) {
     companion object {
 
-        fun of(betting: Betting, earnedPoint: Long, isPredicted: Boolean) = BettingResult(
-            betting = betting,
+        fun of(bettingId: Long, earnedPoint: Long, isPredicted: Boolean) = BettingResult(
+            bettingId = bettingId,
             isPredicted = isPredicted,
             earnedPoint = earnedPoint
         )
