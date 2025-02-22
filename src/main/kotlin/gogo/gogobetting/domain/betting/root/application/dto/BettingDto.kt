@@ -8,7 +8,3 @@ data class BettingDto(
     @NotNull
     val bettingPoint: Long
 )
-
-data class MatchOddsDto(
-    val odds: Double
-)
