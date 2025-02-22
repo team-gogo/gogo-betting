@@ -1,4 +1,4 @@
-package gogo.gogobetting.domain.betting.root.event
+package gogo.gogobetting.global.kafka.consumer.dto
 
 data class MatchBettingEvent(
     val id: String,

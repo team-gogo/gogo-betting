@@ -1,8 +1,6 @@
 package gogo.gogobetting.global.kafka.configuration
 
-import gogo.gogobetting.global.kafka.consumer.MatchBettingFailedConsumer
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.core.ConsumerFactory
@@ -15,10 +13,6 @@ import org.springframework.kafka.listener.AcknowledgingMessageListener
 class KafkaConsumerConfig(
     private val kafkaProperties: KafkaProperties
 ) {
-
-    @Bean
-    fun matchBettingFailedEventListenerContainerFactory(listener: MatchBettingFailedConsumer): ConcurrentKafkaListenerContainerFactory<String, String> =
-        makeFactory(listener)
 
     private fun makeFactory(listener: AcknowledgingMessageListener<String, String>): ConcurrentKafkaListenerContainerFactory<String, String> {
         return ConcurrentKafkaListenerContainerFactory<String, String>().apply {
