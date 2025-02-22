@@ -3,6 +3,7 @@ package gogo.gogobetting.global.config
 import gogo.gogobetting.global.filter.AuthenticationFilter
 import gogo.gogobetting.global.handler.CustomAccessDeniedHandler
 import gogo.gogobetting.global.handler.CustomAuthenticationEntryPointHandler
+import gogo.gogobetting.global.internal.user.stub.Authority
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -43,6 +44,12 @@ class SecurityConfig(
         http.authorizeHttpRequests { httpRequests ->
             // health check
             httpRequests.requestMatchers(HttpMethod.GET, "/betting/health").permitAll()
+
+            // betting
+            httpRequests.requestMatchers(HttpMethod.POST, "/betting/{match_id}").hasAnyRole(Authority.USER.name, Authority.STAFF.name)
+
+            // batch
+            httpRequests.requestMatchers(HttpMethod.POST, "/betting/batch/{match_id}").hasAnyRole(Authority.USER.name, Authority.STAFF.name)
 
             httpRequests.anyRequest().denyAll()
         }
