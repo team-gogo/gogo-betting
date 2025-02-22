@@ -1,6 +1,5 @@
 package gogo.gogobetting.domain.betting.root.persistence
 
-import gogo.gogobetting.domain.betting.root.persistence.type.BettingStatus
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -11,7 +10,10 @@ class Betting(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    val id: Long = 0,
+    val id: Long,
+
+    @Column(name = "game_id", nullable = false)
+    val gameId: Long,
 
     @Column(name = "match_id", nullable = false)
     val matchId: Long,
@@ -25,28 +27,7 @@ class Betting(
     @Column(name = "predicted_win_team_id", nullable = false)
     val predictedWinTeamId: Long,
 
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    var status: BettingStatus,
-
     @Column(name = "created_at", nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
-) {
-
-    fun cancel() {
-        status = BettingStatus.CANCELLED
-    }
-
-    companion object {
-
-        fun of(matchId: Long, studentId: Long, point: Long, predictedWinTeamId: Long) = Betting(
-            matchId = matchId,
-            studentId = studentId,
-            point = point,
-            predictedWinTeamId = predictedWinTeamId,
-            status = BettingStatus.CONFIRMED,
-        )
-
-    }
-}
+)
