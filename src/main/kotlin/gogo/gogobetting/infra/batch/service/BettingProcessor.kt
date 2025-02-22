@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import kotlin.math.ceil
 
-@Component("springBatchBettingProcessor")
+@Component("batchBettingProcessor")
 @StepScope
 class BettingProcessor : ItemProcessor<Betting, BettingResult> {
 

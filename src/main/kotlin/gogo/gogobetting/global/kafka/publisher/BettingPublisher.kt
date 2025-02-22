@@ -12,7 +12,7 @@ class BettingPublisher(
 ){
 
     fun publishMatchBettingEvent(
-        event: MatchBettingEvent,
+        event: MatchBettingEvent
     ) {
         val key = UUID.randomUUID().toString()
         transactionEventPublisher.publishEvent(
