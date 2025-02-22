@@ -2,6 +2,8 @@ package gogo.gogobetting.infra.batch.service
 
 import gogo.gogobetting.domain.betting.result.persistence.BettingResult
 import gogo.gogobetting.domain.betting.root.persistence.Betting
+import org.springframework.batch.core.StepExecution
+import org.springframework.batch.core.annotation.BeforeStep
 import org.springframework.batch.core.configuration.annotation.StepScope
 import org.springframework.batch.item.ItemProcessor
 import org.springframework.beans.factory.annotation.Value
@@ -22,13 +24,11 @@ class BettingProcessor : ItemProcessor<Betting, BettingResult> {
         val isPredicted = betting.predictedWinTeamId == winTeamId
         val earnedPoint = if (isPredicted) ceil(betting.point * bettingOdds).toLong() + betting.point else 0
 
-        val bettingResult = BettingResult.of(
-            bettingId = betting.id,
+        return BettingResult.of(
+            betting = betting,
             isPredicted = isPredicted,
             earnedPoint = earnedPoint
         )
-
-        return bettingResult
     }
 
 }
