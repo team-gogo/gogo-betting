@@ -18,7 +18,6 @@ class BatchServiceImpl(
     override fun batch(matchId: Long, dto: BatchDto) {
 
         // 중복 정산 valid
-        // 해당 스테이지 관리자인지 valida
         // 배당률 계산 process
 
         val bettingOdds = 50.0
