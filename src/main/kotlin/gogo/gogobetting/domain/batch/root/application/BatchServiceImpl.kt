@@ -12,6 +12,8 @@ import java.util.*
 class BatchServiceImpl(
     private val jobLauncher: JobLauncher,
     private val job: Job,
+    private val batchReader: BatchReader,
+    private val batchValidator: BatchValidator,
     private val userUtil: UserContextUtil
 ) : BatchService {
 
@@ -19,11 +21,9 @@ class BatchServiceImpl(
 
         val studentId = userUtil.getCurrentStudent().studentId
 
-        // 중복 정산 valid
-        // 해당 스테이지 관리자인지 valida
-        // 배당률 계산 process
+        batchValidator.valid(matchId, studentId)
 
-        val bettingOdds = 50.0
+        val bettingOdds = batchReader.readBettingOdds(matchId, dto.winTeamId)
 
         val jobParameters = JobParametersBuilder()
             .addLong("matchId", matchId)

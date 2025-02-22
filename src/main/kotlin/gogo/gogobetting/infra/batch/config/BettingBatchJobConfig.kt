@@ -2,12 +2,10 @@ package gogo.gogobetting.infra.batch.config
 
 import gogo.gogobetting.domain.betting.result.persistence.BettingResult
 import gogo.gogobetting.domain.betting.root.persistence.Betting
-import gogo.gogobetting.domain.betting.root.persistence.BettingRepository
 import gogo.gogobetting.infra.batch.listener.BatchExecutionListener
 import gogo.gogobetting.infra.batch.service.BettingProcessor
 import gogo.gogobetting.infra.batch.service.BettingReader
 import gogo.gogobetting.infra.batch.service.BettingWriter
-import jakarta.persistence.EntityManagerFactory
 import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step

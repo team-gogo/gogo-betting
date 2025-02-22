@@ -19,12 +19,6 @@ class BatchApplicationEventListener(
         with(event) {
             log.info("published betting batch application event: {}", id)
             batchPublisher.publishBettingBatchEvent(event)
-
-            println("=== ${event} ===")
-
-            event.students.forEach {
-                println(it.toString())
-            }
         }
     }
 
