@@ -10,10 +10,7 @@ class Batch(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    val id: Long,
-
-    @Column(name = "game_id", nullable = false)
-    val gameId: Long,
+    val id: Long = 0,
 
     @Column(name = "match_id", nullable = false)
     val matchId: Long,
@@ -24,10 +21,31 @@ class Batch(
     @Column(name = "start_time", nullable = false)
     val startTime: LocalDateTime,
 
-    @Column(name = "end_time", nullable = false)
-    val endTime: LocalDateTime,
+    @Column(name = "end_time", nullable = true)
+    var endTime: LocalDateTime?,
 
     @Column(name = "is_cancelled", nullable = false)
-    val isCancelled: Boolean,
+    var isCancelled: Boolean,
 
-)
+) {
+
+    fun updateEndTime() {
+        this.endTime = LocalDateTime.now()
+    }
+
+    fun failed() {
+        this.isCancelled = true
+    }
+
+    companion object {
+
+        fun of(matchId: Long, studentId: Long, startTime: LocalDateTime, endTime: LocalDateTime?) = Batch(
+            matchId = matchId,
+            studentId = studentId,
+            startTime = startTime,
+            endTime = endTime,
+            isCancelled = false,
+        )
+
+    }
+}
