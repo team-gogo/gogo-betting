@@ -18,7 +18,7 @@ class BatchServiceImpl(
 ) : BatchService {
 
     override fun batch(matchId: Long, dto: BatchDto) {
-
+        // 동시성 처리 필요
         val studentId = userUtil.getCurrentStudent().studentId
 
         batchValidator.valid(matchId, studentId)
