@@ -1,6 +1,6 @@
 package gogo.gogobetting.domain.batch.root.application.listener
 
-import gogo.gogobetting.domain.batch.root.event.BettingBatchEvent
+import gogo.gogobetting.domain.batch.root.event.MatchBatchEvent
 import gogo.gogobetting.global.kafka.publisher.BatchPublisher
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -15,7 +15,7 @@ class BatchApplicationEventListener(
     private val log = LoggerFactory.getLogger(this::class.java.simpleName)
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun bettingBatchEvent(event: BettingBatchEvent) {
+    fun bettingBatchEvent(event: MatchBatchEvent) {
         with(event) {
             log.info("published betting batch application event: {}", id)
             batchPublisher.publishBettingBatchEvent(event)

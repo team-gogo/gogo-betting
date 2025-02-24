@@ -1,6 +1,6 @@
 package gogo.gogobetting.global.kafka.publisher
 
-import gogo.gogobetting.domain.batch.root.event.BettingBatchEvent
+import gogo.gogobetting.domain.batch.root.event.MatchBatchEvent
 import gogo.gogobetting.global.kafka.properties.KafkaTopics.MATCH_BATCH
 import gogo.gogobetting.global.publisher.TransactionEventPublisher
 import org.springframework.stereotype.Component
@@ -12,7 +12,7 @@ class BatchPublisher(
 ){
 
     fun publishBettingBatchEvent(
-        event: BettingBatchEvent,
+        event: MatchBatchEvent,
     ) {
         val key = UUID.randomUUID().toString()
         transactionEventPublisher.publishEvent(

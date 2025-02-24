@@ -2,7 +2,7 @@ package gogo.gogobetting.infra.batch.service
 
 import gogo.gogobetting.domain.batch.detail.persistence.BatchDetail
 import gogo.gogobetting.domain.batch.detail.persistence.BatchDetailRepository
-import gogo.gogobetting.domain.batch.root.event.BettingBatchEvent
+import gogo.gogobetting.domain.batch.root.event.MatchBatchEvent
 import gogo.gogobetting.domain.batch.root.event.StudentBettingDto
 import gogo.gogobetting.domain.batch.root.persistence.BatchRepository
 import gogo.gogobetting.domain.betting.result.persistence.BettingResult
@@ -70,7 +70,7 @@ class BettingWriter(
             }
 
         applicationEventPublisher.publishEvent(
-            BettingBatchEvent(
+            MatchBatchEvent(
                 id = UUID.randomUUID().toString(),
                 matchId = matchId,
                 victoryTeamId = winTeamId,
