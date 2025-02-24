@@ -2,6 +2,7 @@ package gogo.gogobetting.domain.batch.root.event
 
 data class MatchBatchEvent(
     val id: String,
+    val batchId: Long,
     val matchId: Long,
     val victoryTeamId: Long,
     val aTeamScore: Int,

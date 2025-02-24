@@ -72,6 +72,7 @@ class BettingWriter(
         applicationEventPublisher.publishEvent(
             MatchBatchEvent(
                 id = UUID.randomUUID().toString(),
+                batchId = batchId,
                 matchId = matchId,
                 victoryTeamId = winTeamId,
                 aTeamScore = aTeamScore,
