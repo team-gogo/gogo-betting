@@ -1,7 +1,7 @@
 package gogo.gogobetting.global.internal.stage.api
 
-import gogo.gogobetting.global.internal.stage.stub.IsMaintainerDto
+import gogo.gogobetting.global.internal.stage.stub.MatchApiInfo
 
 interface StageApi {
-    fun isMaintainer(matchLId: Long, studentId: Long): IsMaintainerDto
+    fun matchApiInfo(matchLId: Long): MatchApiInfo
 }
