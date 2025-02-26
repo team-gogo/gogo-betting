@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query
 interface BatchRepository: JpaRepository<Batch, Long> {
     fun existsByMatchIdAndIsCancelledFalse(matchId: Long): Boolean
 
+    fun findByMatchIdAndIsCancelledTrueOrderByCancelTimeDesc(matchId: Long): Batch?
+
     @Modifying(clearAutomatically = true)
     @Query("DELETE FROM BatchDetail bd WHERE bd.batchId = :batchId")
     fun deleteCancelledBatchDetail(batchId: Long)

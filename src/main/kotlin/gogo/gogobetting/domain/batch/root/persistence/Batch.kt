@@ -27,6 +27,9 @@ class Batch(
     @Column(name = "is_cancelled", nullable = false)
     var isCancelled: Boolean,
 
+    @Column(name = "cancel_time", nullable = true)
+    var cancelTime: LocalDateTime? = null,
+
 ) {
 
     fun updateEndTime() {
@@ -35,6 +38,7 @@ class Batch(
 
     fun failed() {
         this.isCancelled = true
+        this.cancelTime = LocalDateTime.now()
     }
 
     companion object {
