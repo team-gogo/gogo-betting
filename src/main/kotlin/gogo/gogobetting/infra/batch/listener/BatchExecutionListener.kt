@@ -34,7 +34,7 @@ class BatchExecutionListener(
         val batch = batchRepository.findByIdOrNull(batchId)!!
         batch.updateEndTime()
         if (jobExecution.status.isUnsuccessful) {
-            batch.failed()
+            batch.cancel()
         }
         batchRepository.save(batch)
     }

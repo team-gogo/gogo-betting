@@ -36,7 +36,7 @@ class Batch(
         this.endTime = LocalDateTime.now()
     }
 
-    fun failed() {
+    fun cancel() {
         this.isCancelled = true
         this.cancelTime = LocalDateTime.now()
     }

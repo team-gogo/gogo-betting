@@ -6,6 +6,7 @@ import org.springframework.batch.core.Job
 import org.springframework.batch.core.JobParametersBuilder
 import org.springframework.batch.core.launch.JobLauncher
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
@@ -13,6 +14,7 @@ class BatchServiceImpl(
     private val jobLauncher: JobLauncher,
     private val job: Job,
     private val batchReader: BatchReader,
+    private val batchProcessor: BatchProcessor,
     private val batchValidator: BatchValidator,
     private val userUtil: UserContextUtil
 ) : BatchService {
@@ -37,6 +39,14 @@ class BatchServiceImpl(
 
         jobLauncher.run(job, jobParameters)
 
+    }
+
+    @Transactional
+    override fun cancel(matchId: Long) {
+        // 동시성 처리 필요
+        val studentId = userUtil.getCurrentStudent().studentId
+        val batch = batchValidator.cancelValid(matchId, studentId)
+        batchProcessor.cancel(batch)
     }
 
 }
