@@ -9,8 +9,8 @@ interface BettingRepository: JpaRepository<Betting, Long>, BettingCustomReposito
     fun existsByMatchIdAndStudentIdAndStatus(matchId: Long, studentId: Long, status: BettingStatus): Boolean
 
     @Modifying(clearAutomatically = true)
-    @Query("DELETE FROM BettingResult br WHERE br.bettingId IN (:bettingIds)")
-    fun deleteCancelledBatchResult(bettingIds: List<Long>)
+    @Query("UPDATE BettingResult br SET br.isCancelled = true WHERE br.bettingId IN (:bettingIds)")
+    fun cancelledBatchResult(bettingIds: List<Long>)
 
     fun findAllByMatchId(matchId: Long): List<Betting>
 }

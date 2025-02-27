@@ -19,11 +19,10 @@ class AdditionTempPointFailedSaga(
         val batch = (batchRepository.findByIdOrNull(batchId)
             ?: throw BettingException("Batch Not Found -- SAGA.cancelledBatch($batchId)", HttpStatus.NOT_FOUND.value()))
         batch.cancel()
+        batchRepository.save(batch)
 
         val bettings = bettingRepository.findAllByMatchId(batch.matchId)
-        bettingRepository.deleteCancelledBatchResult(bettings.map { it.id })
-        batchRepository.deleteCancelledBatchDetail(batchId)
-        batchRepository.save(batch)
+        bettingRepository.cancelledBatchResult(bettings.map { it.id })
     }
 
 }

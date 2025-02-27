@@ -71,7 +71,7 @@ class BatchValidator(
         if (isMaintainer.not()) {
             throw BettingException(
                 "Not Maintainer, Student Id: $studentId, Match Id: $matchId",
-                HttpStatus.BAD_REQUEST.value()
+                HttpStatus.FORBIDDEN.value()
             )
         }
     }

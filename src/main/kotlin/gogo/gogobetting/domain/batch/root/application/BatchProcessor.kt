@@ -12,11 +12,10 @@ class BatchProcessor(
 ) {
 
     fun cancel(batch: Batch) {
-        batchRepository.deleteCancelledBatchDetail(batch.id)
         batch.cancel()
         batchRepository.save(batch)
         val deleteBettingIds = bettingRepository.findAllByMatchId(batch.matchId)
-        bettingRepository.deleteCancelledBatchResult(deleteBettingIds.map { it.id })
+        bettingRepository.cancelledBatchResult(deleteBettingIds.map { it.id })
     }
 
 }
