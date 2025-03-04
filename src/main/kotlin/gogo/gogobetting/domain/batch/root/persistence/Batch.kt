@@ -41,6 +41,11 @@ class Batch(
         this.cancelTime = LocalDateTime.now()
     }
 
+    fun rollbackCancel() {
+        this.isCancelled = false
+        this.cancelTime = null
+    }
+
     companion object {
 
         fun of(matchId: Long, studentId: Long, startTime: LocalDateTime, endTime: LocalDateTime?) = Batch(

@@ -1,6 +1,7 @@
 package gogo.gogobetting.global.kafka.configuration
 
 import gogo.gogobetting.global.kafka.consumer.BatchAdditionTempPointFailedConsumer
+import gogo.gogobetting.global.kafka.consumer.BatchCancelDeleteTempPointFailedConsumer
 import gogo.gogobetting.global.kafka.consumer.MatchBettingFailedConsumer
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.context.annotation.Bean
@@ -23,6 +24,10 @@ class KafkaConsumerConfig(
 
     @Bean
     fun batchAdditionTempPointFailedEventListenerContainerFactory(listener: BatchAdditionTempPointFailedConsumer): ConcurrentKafkaListenerContainerFactory<String, String> =
+        makeFactory(listener)
+
+    @Bean
+    fun batchCancelDeleteTempPointFailedEventListenerContainerFactory(listener: BatchCancelDeleteTempPointFailedConsumer): ConcurrentKafkaListenerContainerFactory<String, String> =
         makeFactory(listener)
 
     private fun makeFactory(listener: AcknowledgingMessageListener<String, String>): ConcurrentKafkaListenerContainerFactory<String, String> {
