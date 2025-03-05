@@ -30,7 +30,7 @@ class BatchValidator(
             throw BettingException("Duplicate Batch, Match Id: $matchId", HttpStatus.BAD_REQUEST.value())
         }
 
-        val cancelBatch = batchRepository.findByMatchIdAndIsCancelledTrueOrderByCancelTimeDesc(matchId)
+        val cancelBatch = batchRepository.findByMatchIdAndIsCancelledTrueOrderByCancelTimeDesc(matchId).firstOrNull()
         val now = LocalDateTime.now()
         val waitMinute = 3L
         if (
@@ -40,7 +40,7 @@ class BatchValidator(
             throw BettingException(
                     "정산이 취소되었다면 ${waitMinute}분 후에 다시 정산이 가능합니다. " +
                     "Match Id: $matchId, " +
-                    "남은 시간: ${now.minute - cancelBatch.cancelTime!!.plusMinutes(waitMinute).minute}분"
+                    "남은 시간: ${cancelBatch.cancelTime!!.plusMinutes(waitMinute).minute - now.minute}분"
                 ,HttpStatus.FORBIDDEN.value())
         }
     }

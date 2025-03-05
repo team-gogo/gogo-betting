@@ -9,7 +9,7 @@ interface BatchRepository: JpaRepository<Batch, Long> {
 
     fun findByMatchIdAndIsCancelledFalse(matchId: Long): Batch?
 
-    fun findByMatchIdAndIsCancelledTrueOrderByCancelTimeDesc(matchId: Long): Batch?
+    fun findByMatchIdAndIsCancelledTrueOrderByCancelTimeDesc(matchId: Long): List<Batch>
 
     @Modifying(clearAutomatically = true)
     @Query("DELETE FROM BatchDetail bd WHERE bd.batchId = :batchId")
