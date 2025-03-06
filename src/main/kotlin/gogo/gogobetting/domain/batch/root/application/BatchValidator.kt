@@ -17,14 +17,6 @@ class BatchValidator(
 ) {
 
     fun valid(matchId: Long, studentId: Long) {
-        val matchDto = stageApi.matchApiInfo(matchId)
-
-        isMaintainer(matchDto, studentId, matchId)
-
-        if (LocalDateTime.now().isBefore(matchDto.endDate)) {
-            throw BettingException("Match Is Not End, Match Id: $matchId", HttpStatus.BAD_REQUEST.value())
-        }
-
         val isDuplicate = batchRepository.existsByMatchIdAndIsCancelledFalse(matchId)
         if (isDuplicate) {
             throw BettingException("Duplicate Batch, Match Id: $matchId", HttpStatus.BAD_REQUEST.value())
@@ -38,18 +30,21 @@ class BatchValidator(
             now.isBefore(cancelBatch.cancelTime!!.plusMinutes(waitMinute))
         ) {
             throw BettingException(
-                    "정산이 취소되었다면 ${waitMinute}분 후에 다시 정산이 가능합니다. " +
-                    "Match Id: $matchId, " +
-                    "남은 시간: ${cancelBatch.cancelTime!!.plusMinutes(waitMinute).minute - now.minute}분"
+                "정산이 취소되었다면 ${waitMinute}분 후에 다시 정산이 가능합니다. " +
+                        "Match Id: $matchId, " +
+                        "남은 시간: ${cancelBatch.cancelTime!!.plusMinutes(waitMinute).minute - now.minute}분"
                 ,HttpStatus.FORBIDDEN.value())
+        }
+
+        val matchDto = stageApi.matchApiInfo(matchId)
+        isMaintainer(matchDto, studentId, matchId)
+
+        if (LocalDateTime.now().isBefore(matchDto.endDate)) {
+            throw BettingException("Match Is Not End, Match Id: $matchId", HttpStatus.BAD_REQUEST.value())
         }
     }
 
     fun cancelValid(matchId: Long, studentId: Long): Batch {
-        val matchDto = stageApi.matchApiInfo(matchId)
-
-        isMaintainer(matchDto, studentId, matchId)
-
         val batch = batchRepository.findByMatchIdAndIsCancelledFalse(matchId)
             ?: throw BettingException("Not Found Batch, Match Id: $matchId", HttpStatus.NOT_FOUND.value())
 
@@ -57,6 +52,9 @@ class BatchValidator(
         if (now.isAfter(batch.endTime!!.plusMinutes(5))) {
             throw BettingException("정산 이후 5분이 지난 후에는 정산 취소가 불가능합니다.", HttpStatus.FORBIDDEN.value())
         }
+
+        val matchDto = stageApi.matchApiInfo(matchId)
+        isMaintainer(matchDto, studentId, matchId)
 
         return batch
     }

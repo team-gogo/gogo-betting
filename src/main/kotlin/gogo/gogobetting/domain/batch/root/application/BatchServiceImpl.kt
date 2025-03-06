@@ -42,6 +42,8 @@ class BatchServiceImpl(
 
         jobLauncher.run(job, jobParameters)
 
+        throw RuntimeException()
+
     }
 
     @Transactional
@@ -54,7 +56,8 @@ class BatchServiceImpl(
         applicationEventPublisher.publishEvent(
             BatchCancelEvent(
                 id = UUID.randomUUID().toString(),
-                batchId = batch.id
+                batchId = batch.id,
+                matchId = matchId,
             )
         )
     }
