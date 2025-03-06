@@ -27,14 +27,23 @@ class Batch(
     @Column(name = "is_cancelled", nullable = false)
     var isCancelled: Boolean,
 
+    @Column(name = "cancel_time", nullable = true)
+    var cancelTime: LocalDateTime? = null,
+
 ) {
 
     fun updateEndTime() {
         this.endTime = LocalDateTime.now()
     }
 
-    fun failed() {
+    fun cancel() {
         this.isCancelled = true
+        this.cancelTime = LocalDateTime.now()
+    }
+
+    fun rollbackCancel() {
+        this.isCancelled = false
+        this.cancelTime = null
     }
 
     companion object {

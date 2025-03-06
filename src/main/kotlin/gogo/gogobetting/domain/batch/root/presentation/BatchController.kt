@@ -22,4 +22,12 @@ class BatchController(
         return ResponseEntity(HttpStatus.OK)
     }
 
+    @PostMapping("/batch/cancel/{match_id}")
+    fun calcel(
+        @PathVariable("match_id") matchId: Long,
+    ): ResponseEntity<Void> {
+        batchService.cancel(matchId)
+        return ResponseEntity(HttpStatus.OK)
+    }
+
 }

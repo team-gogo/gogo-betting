@@ -1,5 +1,6 @@
 package gogo.gogobetting.domain.batch.root.application.listener
 
+import gogo.gogobetting.domain.batch.root.event.BatchCancelEvent
 import gogo.gogobetting.domain.batch.root.event.MatchBatchEvent
 import gogo.gogobetting.global.kafka.publisher.BatchPublisher
 import org.slf4j.LoggerFactory
@@ -19,6 +20,14 @@ class BatchApplicationEventListener(
         with(event) {
             log.info("published betting batch application event: {}", id)
             batchPublisher.publishBettingBatchEvent(event)
+        }
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    fun batchCancelEvent(event: BatchCancelEvent) {
+        with(event) {
+            log.info("published batch cancel application event: {}", id)
+            batchPublisher.publishBatchCancelEvent(event)
         }
     }
 

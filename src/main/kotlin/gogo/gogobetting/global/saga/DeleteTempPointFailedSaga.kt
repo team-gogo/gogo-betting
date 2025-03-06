@@ -9,20 +9,20 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class AdditionTempPointFailedSaga(
-    private val bettingRepository: BettingRepository,
+class DeleteTempPointFailedSaga(
     private val batchRepository: BatchRepository,
+    private val bettingRepository: BettingRepository,
 ) {
 
     @Transactional
-    fun cancelledBatch(batchId: Long) {
+    fun rollbackCancelledBatch(batchId: Long) {
         val batch = (batchRepository.findByIdOrNull(batchId)
             ?: throw BettingException("Batch Not Found -- SAGA.cancelledBatch($batchId)", HttpStatus.NOT_FOUND.value()))
-        batch.cancel()
+        batch.rollbackCancel()
         batchRepository.save(batch)
 
-        val bettings = bettingRepository.findAllByMatchId(batch.matchId)
-        bettingRepository.cancelledBatchResult(bettings.map { it.id })
+        val cancelledBettingIds = bettingRepository.findAllByMatchId(batch.matchId)
+        bettingRepository.rollbackCancelledBatchResult(cancelledBettingIds.map { it.id })
     }
 
 }
