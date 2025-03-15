@@ -12,11 +12,11 @@ interface BatchRepository: JpaRepository<Batch, Long> {
 
     fun findByMatchIdAndIsCancelledTrueOrderByCancelTimeDesc(matchId: Long): List<Batch>
 
-    @Modifying(clearAutomatically = true)
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE Batch b SET b.isCancelled = true, b.cancelTime = :now WHERE b.id = :batchId")
     fun cancelById(batchId: Long, now: LocalDateTime)
 
-    @Modifying(clearAutomatically = true)
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE Batch b SET b.isCancelled = false, b.cancelTime = null WHERE b.id = :batchId")
     fun rollBackCancelledById(batchId: Long)
 }

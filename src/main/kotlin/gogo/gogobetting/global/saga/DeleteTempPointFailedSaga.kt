@@ -1,7 +1,6 @@
 package gogo.gogobetting.global.saga
 
 import gogo.gogobetting.domain.batch.root.persistence.BatchRepository
-import gogo.gogobetting.domain.betting.result.persistence.BettingResultRepository
 import gogo.gogobetting.domain.betting.root.persistence.BettingRepository
 import gogo.gogobetting.global.error.BettingException
 import org.springframework.data.repository.findByIdOrNull
