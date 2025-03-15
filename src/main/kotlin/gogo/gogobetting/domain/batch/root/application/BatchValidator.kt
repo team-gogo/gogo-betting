@@ -2,10 +2,10 @@ package gogo.gogobetting.domain.batch.root.application
 
 import gogo.gogobetting.domain.batch.root.persistence.Batch
 import gogo.gogobetting.domain.batch.root.persistence.BatchRepository
+import gogo.gogobetting.domain.betting.root.persistence.BettingRepository
 import gogo.gogobetting.global.error.BettingException
 import gogo.gogobetting.global.internal.stage.api.StageApi
 import gogo.gogobetting.global.internal.stage.stub.MatchApiInfo
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
@@ -13,10 +13,13 @@ import java.time.LocalDateTime
 @Component
 class BatchValidator(
     private val batchRepository: BatchRepository,
-    private val stageApi: StageApi
+    private val stageApi: StageApi,
+    private val bettingRepository: BettingRepository
 ) {
 
-    fun valid(matchId: Long, studentId: Long) {
+    fun valid(matchId: Long, studentId: Long): Boolean {
+        val bettingCount = bettingRepository.countByMatchId(matchId)
+
         val isDuplicate = batchRepository.existsByMatchIdAndIsCancelledFalse(matchId)
         if (isDuplicate) {
             throw BettingException("Duplicate Batch, Match Id: $matchId", HttpStatus.BAD_REQUEST.value())
@@ -42,12 +45,11 @@ class BatchValidator(
         if (LocalDateTime.now().isBefore(matchDto.endDate)) {
             throw BettingException("Match Is Not End, Match Id: $matchId", HttpStatus.BAD_REQUEST.value())
         }
+
+        return bettingCount == 0L
     }
 
-    fun cancelValid(matchId: Long, studentId: Long): Batch {
-        val batch = batchRepository.findByMatchIdAndIsCancelledFalse(matchId)
-            ?: throw BettingException("Not Found Batch, Match Id: $matchId", HttpStatus.NOT_FOUND.value())
-
+    fun cancelValid(batch: Batch, matchId: Long, studentId: Long) {
         val now = LocalDateTime.now()
         if (now.isAfter(batch.endTime!!.plusMinutes(5))) {
             throw BettingException("정산 이후 5분이 지난 후에는 정산 취소가 불가능합니다.", HttpStatus.FORBIDDEN.value())
@@ -56,7 +58,7 @@ class BatchValidator(
         val matchDto = stageApi.matchApiInfo(matchId)
         isMaintainer(matchDto, studentId, matchId)
 
-        return batch
+        return
     }
 
     private fun isMaintainer(

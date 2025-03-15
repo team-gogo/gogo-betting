@@ -15,4 +15,8 @@ interface BatchRepository: JpaRepository<Batch, Long> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Batch b SET b.isCancelled = true, b.cancelTime = :now WHERE b.id = :batchId")
     fun cancelById(batchId: Long, now: LocalDateTime)
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Batch b SET b.isCancelled = false, b.cancelTime = null WHERE b.id = :batchId")
+    fun rollBackCancelledById(batchId: Long)
 }

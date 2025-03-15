@@ -64,7 +64,7 @@ class BettingWriter(
 
         val successList = items.filter { it.isPredicted }
             .map { StudentBettingDto(
-                    bettingRepository.findByIdOrNull(it.bettingId)!!.id,
+                    bettingRepository.findByIdOrNull(it.bettingId)!!.studentId,
                     it.earnedPoint
                 )
             }

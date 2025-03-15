@@ -26,7 +26,12 @@ class BatchServiceImpl(
         // 동시성 처리 필요
         val studentId = userUtil.getCurrentStudent().studentId
 
-        batchValidator.valid(matchId, studentId)
+        val isEmptyBetting = batchValidator.valid(matchId, studentId)
+
+        if (isEmptyBetting) {
+            batchProcessor.emptyBettingBatch(matchId, dto, studentId, isEmptyBetting)
+            return
+        }
 
         val bettingOdds = batchReader.readBettingOdds(matchId, dto.winTeamId)
 
@@ -42,15 +47,14 @@ class BatchServiceImpl(
 
         jobLauncher.run(job, jobParameters)
 
-        throw RuntimeException()
-
     }
 
     @Transactional
     override fun cancel(matchId: Long) {
         // 동시성 처리 필요
         val studentId = userUtil.getCurrentStudent().studentId
-        val batch = batchValidator.cancelValid(matchId, studentId)
+        val batch = batchReader.readByMatchId(matchId)
+        batchValidator.cancelValid(batch, matchId, studentId)
         batchProcessor.cancel(batch)
 
         applicationEventPublisher.publishEvent(

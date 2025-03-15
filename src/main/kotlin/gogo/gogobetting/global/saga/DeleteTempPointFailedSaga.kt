@@ -1,6 +1,7 @@
 package gogo.gogobetting.global.saga
 
 import gogo.gogobetting.domain.batch.root.persistence.BatchRepository
+import gogo.gogobetting.domain.betting.result.persistence.BettingResultRepository
 import gogo.gogobetting.domain.betting.root.persistence.BettingRepository
 import gogo.gogobetting.global.error.BettingException
 import org.springframework.data.repository.findByIdOrNull
@@ -18,11 +19,10 @@ class DeleteTempPointFailedSaga(
     fun rollbackCancelledBatch(batchId: Long) {
         val batch = (batchRepository.findByIdOrNull(batchId)
             ?: throw BettingException("Batch Not Found -- SAGA.cancelledBatch($batchId)", HttpStatus.NOT_FOUND.value()))
-        batch.rollbackCancel()
-        batchRepository.save(batch)
 
-        val cancelledBettingIds = bettingRepository.findAllByMatchId(batch.matchId)
-        bettingRepository.rollbackCancelledBatchResult(cancelledBettingIds.map { it.id })
+        val cancelledBettingIds = bettingRepository.findAllByMatchId(batch.matchId).map { it.id }
+        bettingRepository.rollbackCancelledBatchResult(cancelledBettingIds)
+        batchRepository.rollBackCancelledById(batchId)
     }
 
 }
