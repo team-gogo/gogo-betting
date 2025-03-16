@@ -53,7 +53,7 @@ class SecurityConfig(
             httpRequests.requestMatchers(HttpMethod.POST, "/betting/batch/cancel/{match_id}").hasAnyRole(Authority.USER.name, Authority.STAFF.name)
 
             // server to server
-            httpRequests.requestMatchers(HttpMethod.GET, "/betting/{match_id}").permitAll()
+            httpRequests.requestMatchers(HttpMethod.GET, "/betting/bundle").permitAll()
 
             httpRequests.anyRequest().denyAll()
         }

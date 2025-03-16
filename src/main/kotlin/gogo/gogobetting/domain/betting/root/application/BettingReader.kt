@@ -1,6 +1,6 @@
 package gogo.gogobetting.domain.betting.root.application
 
-import gogo.gogobetting.domain.betting.root.persistence.Betting
+import gogo.gogobetting.domain.betting.root.application.dto.BettingBundleInfoDto
 import gogo.gogobetting.domain.betting.root.persistence.BettingRepository
 import org.springframework.stereotype.Component
 
@@ -9,7 +9,7 @@ class BettingReader(
     private val bettingRepository: BettingRepository,
 ) {
 
-    fun readOrNull(matchId: Long, studentId: Long): Betting? =
-        bettingRepository.findByMatchIdAndStudentIdAndStatus(matchId, studentId)
+    fun readBundleInfo(matchIds: List<Long>, studentId: Long): List<BettingBundleInfoDto> =
+        bettingRepository.findBettingBundleInfo(matchIds, studentId)
 
 }

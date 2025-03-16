@@ -13,9 +13,13 @@ data class MatchOddsDto(
     val odds: Double
 )
 
-data class QueryBettingDto(
-    val isBetting: Boolean,
-    val betting: BettingInfoDto?,
+data class BettingBundleDto(
+    val bettings: List<BettingBundleInfoDto>
+)
+
+data class BettingBundleInfoDto(
+    val matchId: Long,
+    val betting: BettingInfoDto,
     val result: BettingResultInfoDto?
 )
 

@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.Query
 interface BettingRepository: JpaRepository<Betting, Long>, BettingCustomRepository {
     fun existsByMatchIdAndStudentIdAndStatus(matchId: Long, studentId: Long, status: BettingStatus): Boolean
 
-    fun findByMatchIdAndStudentIdAndStatus(matchId: Long, studentId: Long, status: BettingStatus = BettingStatus.CONFIRMED): Betting?
-
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE BettingResult br SET br.isCancelled = true WHERE br.bettingId IN (:bettingIds)")
     fun cancelledBatchResult(bettingIds: List<Long>)

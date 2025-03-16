@@ -1,8 +1,15 @@
 package gogo.gogobetting.domain.betting.root.persistence
 
+import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
+import gogo.gogobetting.domain.betting.result.persistence.QBettingResult
+import gogo.gogobetting.domain.betting.result.persistence.QBettingResult.*
+import gogo.gogobetting.domain.betting.root.application.dto.BettingBundleInfoDto
+import gogo.gogobetting.domain.betting.root.application.dto.BettingInfoDto
+import gogo.gogobetting.domain.betting.root.application.dto.BettingResultInfoDto
 import gogo.gogobetting.domain.betting.root.application.dto.MatchOddsDto
 import gogo.gogobetting.domain.betting.root.persistence.QBetting.betting
+import gogo.gogobetting.domain.betting.root.persistence.type.BettingStatus
 import gogo.gogobetting.domain.betting.root.persistence.type.BettingStatus.*
 import org.springframework.stereotype.Repository
 
@@ -36,5 +43,37 @@ class BettingCustomRepositoryImpl(
 
         return MatchOddsDto(odds)
     }
+
+    override fun findBettingBundleInfo(matchIds: List<Long>, studentId: Long): List<BettingBundleInfoDto> =
+        queryFactory
+            .select(
+                Projections.constructor(
+                    BettingBundleInfoDto::class.java,
+                    betting.matchId,
+                    Projections.constructor(
+                        BettingInfoDto::class.java,
+                        betting.id,
+                        betting.point,
+                        betting.predictedWinTeamId,
+                    ),
+                    Projections.constructor(
+                        BettingResultInfoDto::class.java,
+                        bettingResult.isPredicted,
+                        bettingResult.earnedPoint
+                    ).`as`("result")
+                )
+            )
+            .from(betting)
+            .leftJoin(bettingResult)
+            .on(
+                bettingResult.bettingId.eq(betting.id)
+                    .and(bettingResult.isCancelled.eq(false))
+            )
+            .where(
+                betting.matchId.`in`(matchIds)
+                    .and(betting.studentId.eq(studentId))
+                    .and(betting.status.eq(CONFIRMED))
+            )
+            .fetch()
 
 }
