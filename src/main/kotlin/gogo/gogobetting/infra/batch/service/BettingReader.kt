@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-@Configuration
+@Configuration("springBatchBettingReader")
 class BettingReader(
     private val entityManagerFactory: EntityManagerFactory
 ) {
 
-    @Bean("springBatchBettingReader")
+    @Bean("batchBettingReader")
     @StepScope
     fun bettingReader(
         @Value("#{jobParameters['matchId']}") matchId: Long?
