@@ -1,6 +1,7 @@
 package gogo.gogobetting.domain.betting.root.application
 
 import gogo.gogobetting.domain.betting.root.application.dto.BettingDto
+import gogo.gogobetting.domain.betting.root.application.dto.QueryBettingDto
 import gogo.gogobetting.domain.betting.root.event.MatchBettingEvent
 import gogo.gogobetting.global.util.UserContextUtil
 import org.springframework.context.ApplicationEventPublisher
@@ -13,7 +14,9 @@ class BettingServiceImpl(
     private val userUtil: UserContextUtil,
     private val bettingValidator: BettingValidator,
     private val bettingProcessor: BettingProcessor,
-    private val applicationEventPublisher: ApplicationEventPublisher
+    private val applicationEventPublisher: ApplicationEventPublisher,
+    private val bettingReader: BettingReader,
+    private val bettingMapper: BettingMapper
 ) : BettingService {
 
     @Transactional
@@ -33,6 +36,12 @@ class BettingServiceImpl(
                 bettingPoint = dto.bettingPoint
             )
         )
+    }
+
+    @Transactional(readOnly = true)
+    override fun query(matchId: Long, studentId: Long): QueryBettingDto {
+        val betting = bettingReader.readOrNull(matchId, studentId)
+        return bettingMapper.map(betting)
     }
 
 }

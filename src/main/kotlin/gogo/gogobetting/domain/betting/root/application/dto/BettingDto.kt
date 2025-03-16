@@ -12,3 +12,21 @@ data class BettingDto(
 data class MatchOddsDto(
     val odds: Double
 )
+
+data class QueryBettingDto(
+    val isBetting: Boolean,
+    val betting: BettingInfoDto?,
+    val result: BettingResultInfoDto?
+)
+
+data class BettingInfoDto(
+    val bettingId: Long,
+    val bettingPoint: Long,
+    val predictedWinTeamId: Long,
+)
+
+data class BettingResultInfoDto(
+    val isPredicted: Boolean,
+    val earnedPoint: Long,
+)
+
