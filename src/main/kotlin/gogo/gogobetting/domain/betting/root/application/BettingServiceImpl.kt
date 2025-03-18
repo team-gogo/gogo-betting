@@ -1,5 +1,6 @@
 package gogo.gogobetting.domain.betting.root.application
 
+import gogo.gogobetting.domain.betting.root.application.dto.BettingBundleDto
 import gogo.gogobetting.domain.betting.root.application.dto.BettingDto
 import gogo.gogobetting.domain.betting.root.event.MatchBettingEvent
 import gogo.gogobetting.global.util.UserContextUtil
@@ -13,7 +14,8 @@ class BettingServiceImpl(
     private val userUtil: UserContextUtil,
     private val bettingValidator: BettingValidator,
     private val bettingProcessor: BettingProcessor,
-    private val applicationEventPublisher: ApplicationEventPublisher
+    private val applicationEventPublisher: ApplicationEventPublisher,
+    private val bettingReader: BettingReader,
 ) : BettingService {
 
     @Transactional
@@ -33,6 +35,12 @@ class BettingServiceImpl(
                 bettingPoint = dto.bettingPoint
             )
         )
+    }
+
+    @Transactional(readOnly = true)
+    override fun bundle(matchIds: List<Long>, studentId: Long): BettingBundleDto {
+        val bettingBundleInfo = bettingReader.readBundleInfo(matchIds, studentId)
+        return BettingBundleDto(bettingBundleInfo)
     }
 
 }
