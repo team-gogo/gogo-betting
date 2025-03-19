@@ -29,6 +29,8 @@ repositories {
 extra["springCloudVersion"] = "2024.0.0"
 
 dependencies {
+    implementation("org.springframework.cloud:spring-cloud-starter-bus-kafka")
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
     kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
     kapt("jakarta.annotation:jakarta.annotation-api")
