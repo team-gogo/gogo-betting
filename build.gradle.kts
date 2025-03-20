@@ -31,7 +31,6 @@ extra["springCloudVersion"] = "2024.0.0"
 dependencies {
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.cloud:spring-cloud-starter-bus-kafka")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
     kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
