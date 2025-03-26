@@ -16,6 +16,7 @@ class BettingServiceImpl(
     private val bettingProcessor: BettingProcessor,
     private val applicationEventPublisher: ApplicationEventPublisher,
     private val bettingReader: BettingReader,
+    private val bettingMapper: BettingMapper,
 ) : BettingService {
 
     @Transactional
@@ -39,8 +40,8 @@ class BettingServiceImpl(
 
     @Transactional(readOnly = true)
     override fun bundle(matchIds: List<Long>, studentId: Long): BettingBundleDto {
-        val bettingBundleInfo = bettingReader.readBundleInfo(matchIds, studentId)
-        return BettingBundleDto(bettingBundleInfo)
+        val bettings = bettingReader.readBundleInfo(matchIds, studentId)
+        return bettingMapper.mapBundle(bettings)
     }
 
 }
