@@ -5,7 +5,7 @@ import gogo.gogobetting.global.filter.LoggingFilter
 import gogo.gogobetting.global.handler.CustomAccessDeniedHandler
 import gogo.gogobetting.global.handler.CustomAuthenticationEntryPointHandler
 import gogo.gogobetting.global.internal.user.stub.Authority
-import org.springframework.boot.autoconfigure.security.SecurityProperties
+import gogo.gogobetting.global.security.SecurityProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
