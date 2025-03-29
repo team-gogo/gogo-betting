@@ -50,9 +50,8 @@ class BatchServiceImpl(
 
     @Transactional
     override fun cancel(matchId: Long) {
-        // 동시성 처리 필요
         val studentId = userUtil.getCurrentStudent().studentId
-        val batch = batchReader.readByMatchId(matchId)
+        val batch = batchReader.readByMatchIdForWrite(matchId)
         batchValidator.cancelValid(batch, matchId, studentId)
         batchProcessor.cancel(batch)
 

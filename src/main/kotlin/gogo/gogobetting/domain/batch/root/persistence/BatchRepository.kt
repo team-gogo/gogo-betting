@@ -12,6 +12,7 @@ interface BatchRepository: JpaRepository<Batch, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     fun existsByMatchIdAndIsCancelledFalse(matchId: Long): Boolean
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     fun findByMatchIdAndIsCancelledFalse(matchId: Long): Batch?
 
     fun findByMatchIdAndIsCancelledTrueOrderByCancelTimeDesc(matchId: Long): List<Batch>
