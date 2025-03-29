@@ -8,6 +8,7 @@ import gogo.gogobetting.global.internal.stage.api.StageApi
 import gogo.gogobetting.global.internal.stage.stub.MatchApiInfo
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Component
@@ -17,6 +18,7 @@ class BatchValidator(
     private val bettingRepository: BettingRepository
 ) {
 
+    @Transactional
     fun valid(matchId: Long, studentId: Long): Boolean {
         val bettingCount = bettingRepository.countByMatchId(matchId)
 
