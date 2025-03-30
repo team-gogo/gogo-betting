@@ -15,7 +15,7 @@ class BatchReader(
     fun readBettingOdds(matchId: Long, winTeamId: Long): Double =
         bettingRepository.calcOdds(matchId, winTeamId).odds
 
-    fun readByMatchId(matchId: Long) = batchRepository.findByMatchIdAndIsCancelledFalse(matchId)
+    fun readByMatchIdForWrite(matchId: Long) = batchRepository.findByMatchIdAndIsCancelledFalse(matchId)
         ?: throw BettingException("Not Found Batch, Match Id: $matchId", HttpStatus.NOT_FOUND.value())
 
 }

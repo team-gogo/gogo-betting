@@ -1,13 +1,18 @@
 package gogo.gogobetting.domain.batch.root.persistence
 
+import jakarta.persistence.LockModeType
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Lock
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import java.time.LocalDateTime
 
 interface BatchRepository: JpaRepository<Batch, Long> {
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     fun existsByMatchIdAndIsCancelledFalse(matchId: Long): Boolean
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     fun findByMatchIdAndIsCancelledFalse(matchId: Long): Batch?
 
     fun findByMatchIdAndIsCancelledTrueOrderByCancelTimeDesc(matchId: Long): List<Batch>
