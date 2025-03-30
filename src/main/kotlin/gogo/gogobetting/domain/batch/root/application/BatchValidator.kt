@@ -1,5 +1,6 @@
 package gogo.gogobetting.domain.batch.root.application
 
+import gogo.gogobetting.domain.batch.root.application.dto.BatchDto
 import gogo.gogobetting.domain.batch.root.persistence.Batch
 import gogo.gogobetting.domain.batch.root.persistence.BatchRepository
 import gogo.gogobetting.domain.betting.root.persistence.BettingRepository
@@ -19,7 +20,11 @@ class BatchValidator(
 ) {
 
     @Transactional
-    fun valid(matchId: Long, studentId: Long): Boolean {
+    fun valid(matchId: Long, studentId: Long, dto: BatchDto): Boolean {
+        if (dto.aTeamScore == dto.bTeamScore) {
+            throw BettingException("무승부 정산은 불가능합니다.", HttpStatus.BAD_REQUEST.value())
+        }
+
         val bettingCount = bettingRepository.countByMatchId(matchId)
 
         val isDuplicate = batchRepository.existsByMatchIdAndIsCancelledFalse(matchId)
