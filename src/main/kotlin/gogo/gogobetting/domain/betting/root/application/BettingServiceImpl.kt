@@ -16,11 +16,11 @@ class BettingServiceImpl(
     private val bettingProcessor: BettingProcessor,
     private val applicationEventPublisher: ApplicationEventPublisher,
     private val bettingReader: BettingReader,
+    private val bettingMapper: BettingMapper,
 ) : BettingService {
 
     @Transactional
     override fun bet (matchId: Long, dto: BettingDto) {
-        // 동시성 처리 필요
         val student = userUtil.getCurrentStudent()
         bettingValidator.valid(matchId, student.studentId)
         val betting = bettingProcessor.save(matchId, student.studentId, dto)
@@ -39,8 +39,8 @@ class BettingServiceImpl(
 
     @Transactional(readOnly = true)
     override fun bundle(matchIds: List<Long>, studentId: Long): BettingBundleDto {
-        val bettingBundleInfo = bettingReader.readBundleInfo(matchIds, studentId)
-        return BettingBundleDto(bettingBundleInfo)
+        val bettings = bettingReader.readBundleInfo(matchIds, studentId)
+        return bettingMapper.mapBundle(bettings)
     }
 
 }

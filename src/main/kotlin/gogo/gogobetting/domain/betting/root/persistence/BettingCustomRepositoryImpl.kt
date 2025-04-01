@@ -44,26 +44,9 @@ class BettingCustomRepositoryImpl(
         return MatchOddsDto(odds)
     }
 
-    override fun findBettingBundleInfo(matchIds: List<Long>, studentId: Long): List<BettingBundleInfoDto> =
+    override fun findBettingBundleInfo(matchIds: List<Long>, studentId: Long): List<Betting> =
         queryFactory
-            .select(
-                Projections.constructor(
-                    BettingBundleInfoDto::class.java,
-                    betting.matchId,
-                    Projections.constructor(
-                        BettingInfoDto::class.java,
-                        betting.id,
-                        betting.point,
-                        betting.predictedWinTeamId,
-                    ),
-                    Projections.constructor(
-                        BettingResultInfoDto::class.java,
-                        bettingResult.isPredicted,
-                        bettingResult.earnedPoint
-                    ).`as`("result")
-                )
-            )
-            .from(betting)
+            .selectFrom(betting)
             .leftJoin(bettingResult)
             .on(
                 bettingResult.bettingId.eq(betting.id)
