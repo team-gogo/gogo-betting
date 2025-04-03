@@ -11,13 +11,13 @@ interface BettingRepository: JpaRepository<Betting, Long>, BettingCustomReposito
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     fun existsByMatchIdAndStudentIdAndStatus(matchId: Long, studentId: Long, status: BettingStatus): Boolean
 
-    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Modifying(flushAutomatically = true)
     @Query("UPDATE BettingResult br SET br.isCancelled = true WHERE br.bettingId IN (:bettingIds)")
-    fun cancelledBatchResult(bettingIds: List<Long>)
+    fun cancelledBettingResult(bettingIds: List<Long>)
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE BettingResult br SET br.isCancelled = false WHERE br.bettingId IN (:bettingIds)")
-    fun rollbackCancelledBatchResult(bettingIds: List<Long>)
+    fun rollbackCancelledBettingResult(bettingIds: List<Long>)
 
     fun findAllByMatchId(matchId: Long): List<Betting>
 
