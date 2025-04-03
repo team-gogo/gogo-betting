@@ -20,7 +20,7 @@ class DeleteTempPointFailedSaga(
             ?: throw BettingException("Batch Not Found -- SAGA.cancelledBatch($batchId)", HttpStatus.NOT_FOUND.value()))
 
         val cancelledBettingIds = bettingRepository.findAllByMatchId(batch.matchId).map { it.id }
-        bettingRepository.rollbackCancelledBatchResult(cancelledBettingIds)
+        bettingRepository.rollbackCancelledBettingResult(cancelledBettingIds)
         batchRepository.rollBackCancelledById(batchId)
     }
 
