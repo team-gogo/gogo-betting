@@ -57,7 +57,7 @@ class BatchProcessor(
 
     fun cancel(batch: Batch) {
         val cancelBettingIds = bettingRepository.findAllByMatchId(batch.matchId)
-        bettingRepository.cancelledBatchResult(cancelBettingIds.map { it.id })
+        bettingRepository.cancelledBettingResult(cancelBettingIds.map { it.id })
         val now = LocalDateTime.now()
         batchRepository.cancelById(batch.id, now)
     }

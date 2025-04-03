@@ -22,7 +22,7 @@ class AdditionTempPointFailedSaga(
         batchRepository.save(batch)
 
         val bettings = bettingRepository.findAllByMatchId(batch.matchId)
-        bettingRepository.cancelledBatchResult(bettings.map { it.id })
+        bettingRepository.cancelledBettingResult(bettings.map { it.id })
     }
 
 }
