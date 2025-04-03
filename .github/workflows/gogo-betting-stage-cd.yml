@@ -1,10 +1,10 @@
 name: GOGO Betting stage CD Workflow
 
-on:
-  push:
-    branches:
-      - 'develop'
-  workflow_dispatch:
+#on:
+#  push:
+#    branches:
+#      - 'develop'
+#  workflow_dispatch:
 
 jobs:
   CI:
