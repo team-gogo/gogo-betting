@@ -12,4 +12,7 @@ class BettingReader(
     fun readBundleInfo(matchIds: List<Long>, studentId: Long): List<Betting> =
         bettingRepository.findBettingBundleInfo(matchIds, studentId)
 
+    fun readBundleActiveInfo(matchIds: List<Long>, studentId: Long): List<Betting> =
+        bettingRepository.findBettingBundleInfo(matchIds, studentId)
+
 }

@@ -59,4 +59,20 @@ class BettingCustomRepositoryImpl(
             )
             .fetch()
 
+    override fun findBettingActiveBundleInfo(matchIds: List<Long>, studentId: Long): List<Betting> =
+        queryFactory
+            .selectFrom(betting)
+            .leftJoin(bettingResult)
+            .on(
+                bettingResult.bettingId.eq(betting.id)
+                    .and(bettingResult.isCancelled.eq(false))
+            )
+            .where(
+                betting.matchId.`in`(matchIds)
+                    .and(betting.studentId.eq(studentId))
+                    .and(betting.status.eq(CONFIRMED))
+                    .and(bettingResult.isNotNull)
+            )
+            .fetch()
+
 }
