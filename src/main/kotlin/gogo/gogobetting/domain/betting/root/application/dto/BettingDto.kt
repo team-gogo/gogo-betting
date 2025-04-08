@@ -34,3 +34,6 @@ data class BettingResultInfoDto(
     val earnedPoint: Long,
 )
 
+data class TotalBettingPointDto(
+    val bettingPoint: Long,
+)
