@@ -1,10 +1,7 @@
 package gogo.gogobetting.domain.betting.root.application
 
 import gogo.gogobetting.domain.betting.result.persistence.BettingResultRepository
-import gogo.gogobetting.domain.betting.root.application.dto.BettingBundleDto
-import gogo.gogobetting.domain.betting.root.application.dto.BettingBundleInfoDto
-import gogo.gogobetting.domain.betting.root.application.dto.BettingInfoDto
-import gogo.gogobetting.domain.betting.root.application.dto.BettingResultInfoDto
+import gogo.gogobetting.domain.betting.root.application.dto.*
 import gogo.gogobetting.domain.betting.root.persistence.Betting
 import org.springframework.stereotype.Component
 
@@ -35,5 +32,9 @@ class BettingMapper(
         return BettingBundleDto(bundleInfo)
     }
 
+    fun mapBettingPoint(bettingList: List<Betting>): TotalBettingPointDto =
+        TotalBettingPointDto(
+            bettingPoint = bettingList.sumOf { it.point }
+        )
 
 }

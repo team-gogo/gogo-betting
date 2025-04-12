@@ -2,6 +2,7 @@ package gogo.gogobetting.domain.betting.root.application
 
 import gogo.gogobetting.domain.betting.root.application.dto.BettingBundleDto
 import gogo.gogobetting.domain.betting.root.application.dto.BettingDto
+import gogo.gogobetting.domain.betting.root.application.dto.TotalBettingPointDto
 import gogo.gogobetting.domain.betting.root.event.MatchBettingEvent
 import gogo.gogobetting.global.util.UserContextUtil
 import org.springframework.context.ApplicationEventPublisher
@@ -41,6 +42,12 @@ class BettingServiceImpl(
     override fun bundle(matchIds: List<Long>, studentId: Long): BettingBundleDto {
         val bettings = bettingReader.readBundleInfo(matchIds, studentId)
         return bettingMapper.mapBundle(bettings)
+    }
+
+    @Transactional(readOnly = true)
+    override fun totalBettingPoint(matchIds: List<Long>, studentId: Long): TotalBettingPointDto {
+        val bettings = bettingReader.readBundleActiveInfo(matchIds, studentId)
+        return bettingMapper.mapBettingPoint(bettings)
     }
 
 }

@@ -63,6 +63,7 @@ class SecurityConfig(
 
             // server to server
             httpRequests.requestMatchers(HttpMethod.GET, "/betting/bundle").access { _, context -> hasIpAddress(context) }
+            httpRequests.requestMatchers(HttpMethod.GET, "/betting/point").access { _, context -> hasIpAddress(context) }
 
             httpRequests.anyRequest().denyAll()
         }
