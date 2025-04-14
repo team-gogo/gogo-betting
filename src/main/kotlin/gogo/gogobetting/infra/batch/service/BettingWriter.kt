@@ -73,8 +73,7 @@ class BettingWriter(
 
         val successList = accumulatedItems.filter { it.isPredicted }
             .map {
-                val studentId = bettingRepository.findByIdOrNull(it.bettingId)?.studentId
-                    ?: error("학생을 찾을 수 없습니다. bettingId=${it.bettingId}")
+                val studentId = bettingRepository.findByIdOrNull(it.bettingId)!!.studentId
                 StudentBettingDto(studentId, it.earnedPoint)
             }
 
