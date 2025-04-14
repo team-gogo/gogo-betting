@@ -59,7 +59,6 @@ class BettingWriter(
 
     @AfterStep
     fun afterStep(stepExecution: StepExecution) {
-        println(">>>>> afterStep called")
         val batch = batchRepository.findByIdOrNull(batchId)!!
 
         batchDetailRepository.save(
