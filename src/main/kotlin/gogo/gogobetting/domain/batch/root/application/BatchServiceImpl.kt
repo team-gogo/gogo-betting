@@ -36,7 +36,7 @@ class BatchServiceImpl(
 
         val jobParameters = JobParametersBuilder()
             .addLong("matchId", matchId)
-            .addLong("studentId", 0L)
+            .addLong("studentId", studentId)
             .addLong("winTeamId", dto.winTeamId)
             .addLong("aTeamScore", dto.aTeamScore.toLong())
             .addLong("bTeamScore", dto.bTeamScore.toLong())
