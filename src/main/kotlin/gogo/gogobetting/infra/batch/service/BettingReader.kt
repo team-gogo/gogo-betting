@@ -1,31 +1,42 @@
 package gogo.gogobetting.infra.batch.service
 
-import gogo.gogobetting.domain.betting.root.persistence.Betting
-import gogo.gogobetting.domain.betting.root.persistence.type.BettingStatus
-import jakarta.persistence.EntityManagerFactory
+import gogo.gogobetting.infra.batch.dto.BettingRow
 import org.springframework.batch.core.configuration.annotation.StepScope
-import org.springframework.batch.item.database.JpaPagingItemReader
+import org.springframework.batch.item.database.JdbcCursorItemReader
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import javax.sql.DataSource
 
 @Configuration("springBatchBettingReader")
-class BettingReader(
-    private val entityManagerFactory: EntityManagerFactory
-) {
+class BettingReader {
 
-    @Bean("batchBettingReader")
+    @Bean
     @StepScope
-    fun bettingReader(
-        @Value("#{jobParameters['matchId']}") matchId: Long?
-    ): JpaPagingItemReader<Betting> {
+    fun jdbcBettingReader(
+        @Value("#{jobParameters['matchId']}") matchId: Long?,
+        dataSource: DataSource
+    ): JdbcCursorItemReader<BettingRow> {
         val validMatchId = matchId ?: throw IllegalArgumentException("matchId is required")
-        return JpaPagingItemReader<Betting>().apply {
-            setEntityManagerFactory(entityManagerFactory)
-            setQueryString("SELECT b FROM Betting b WHERE b.matchId = :matchId AND b.status = :status")
-            setParameterValues(mapOf("matchId" to validMatchId, "status" to BettingStatus.CONFIRMED))
-            pageSize = 50
+
+        return JdbcCursorItemReader<BettingRow>().apply {
+            setDataSource(dataSource)
+            setSql("""
+                SELECT id, match_id, student_id, point, predicted_win_team_id
+                FROM tbl_betting
+                WHERE match_id = ? AND status = 'CONFIRMED'
+                ORDER BY id
+            """.trimIndent())
+            setPreparedStatementSetter { ps -> ps.setLong(1, validMatchId) }
+            setRowMapper { rs, _ ->
+                BettingRow(
+                    id = rs.getLong("id"),
+                    matchId = rs.getLong("match_id"),
+                    studentId = rs.getLong("student_id"),
+                    point = rs.getLong("point"),
+                    predictedWinTeamId = rs.getLong("predicted_win_team_id")
+                )
+            }
         }
     }
-
 }

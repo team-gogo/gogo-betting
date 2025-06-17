@@ -54,6 +54,10 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.springframework.security:spring-security-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("org.jetbrains.exposed:exposed-core:0.45.0")
+    implementation("org.jetbrains.exposed:exposed-dao:0.45.0")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.45.0")
+    implementation("org.jetbrains.exposed:exposed-java-time:0.45.0")
 }
 
 dependencyManagement {
