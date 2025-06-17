@@ -2,6 +2,8 @@ package gogo.gogobetting.infra.batch.service
 
 import gogo.gogobetting.domain.batch.detail.persistence.BatchDetail
 import gogo.gogobetting.domain.batch.detail.persistence.BatchDetailRepository
+import gogo.gogobetting.domain.batch.root.event.MatchBatchEvent
+import gogo.gogobetting.domain.batch.root.event.StudentBettingDto
 import gogo.gogobetting.domain.batch.root.persistence.BatchRepository
 import gogo.gogobetting.domain.betting.result.persistence.BettingResultTable
 import gogo.gogobetting.domain.betting.root.persistence.BettingRepository
@@ -21,6 +23,7 @@ import org.springframework.batch.item.ItemWriter
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import java.util.*
 import javax.sql.DataSource
 import kotlin.math.ceil
 
@@ -86,23 +89,23 @@ class BettingResultWriter(
             )
         )
 
-//        val successList = accumulated.filter { it.isPredicted }
-//            .map {
-//                val studentId = bettingRepository.findByIdOrNull(it.bettingId)!!.studentId
-//                StudentBettingDto(studentId, it.earnedPoint)
-//            }
-//
-//        val event = MatchBatchEvent(
-//            id = UUID.randomUUID().toString(),
-//            batchId = batchId,
-//            matchId = matchId,
-//            victoryTeamId = winTeamId,
-//            aTeamScore = aTeamScore,
-//            bTeamScore = bTeamScore,
-//            students = successList
-//        )
-//
-//        log.info("published betting batch application event: {}", event.id)
-//        batchPublisher.publishBettingBatchEvent(event)
+        val successList = accumulated.filter { it.isPredicted }
+            .map {
+                val studentId = bettingRepository.findByIdOrNull(it.bettingId)!!.studentId
+                StudentBettingDto(studentId, it.earnedPoint)
+            }
+
+        val event = MatchBatchEvent(
+            id = UUID.randomUUID().toString(),
+            batchId = batchId,
+            matchId = matchId,
+            victoryTeamId = winTeamId,
+            aTeamScore = aTeamScore,
+            bTeamScore = bTeamScore,
+            students = successList
+        )
+
+        log.info("published betting batch application event: {}", event.id)
+        batchPublisher.publishBettingBatchEvent(event)
     }
 }
