@@ -23,20 +23,20 @@ class BatchServiceImpl(
 ) : BatchService {
 
     override fun batch(matchId: Long, dto: BatchDto) {
-        val studentId = userUtil.getCurrentStudent().studentId
-
-        val isEmptyBetting = batchValidator.valid(matchId, studentId, dto)
-
-        if (isEmptyBetting) {
-            batchProcessor.emptyBettingBatch(matchId, dto, studentId, isEmptyBetting)
-            return
-        }
+//        val studentId = userUtil.getCurrentStudent().studentId
+//
+//        val isEmptyBetting = batchValidator.valid(matchId, studentId, dto)
+//
+//        if (isEmptyBetting) {
+//            batchProcessor.emptyBettingBatch(matchId, dto, studentId, isEmptyBetting)
+//            return
+//        }
 
         val bettingOdds = batchReader.readBettingOdds(matchId, dto.winTeamId)
 
         val jobParameters = JobParametersBuilder()
             .addLong("matchId", matchId)
-            .addLong("studentId", studentId)
+            .addLong("studentId", 0L)
             .addLong("winTeamId", dto.winTeamId)
             .addLong("aTeamScore", dto.aTeamScore.toLong())
             .addLong("bTeamScore", dto.bTeamScore.toLong())

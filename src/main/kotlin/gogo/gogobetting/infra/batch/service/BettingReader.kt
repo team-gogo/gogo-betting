@@ -24,7 +24,7 @@ class BettingReader(
             setEntityManagerFactory(entityManagerFactory)
             setQueryString("SELECT b FROM Betting b WHERE b.matchId = :matchId AND b.status = :status ORDER BY b.id")
             setParameterValues(mapOf("matchId" to validMatchId, "status" to BettingStatus.CONFIRMED))
-            pageSize = 50
+            pageSize = 1000
         }
     }
 

@@ -58,7 +58,8 @@ class SecurityConfig(
             httpRequests.requestMatchers(HttpMethod.POST, "/betting/{match_id}").hasAnyRole(Authority.USER.name, Authority.STAFF.name)
 
             // batch
-            httpRequests.requestMatchers(HttpMethod.POST, "/betting/batch/{match_id}").hasAnyRole(Authority.USER.name, Authority.STAFF.name)
+//            httpRequests.requestMatchers(HttpMethod.POST, "/betting/batch/{match_id}").hasAnyRole(Authority.USER.name, Authority.STAFF.name)
+            httpRequests.requestMatchers(HttpMethod.POST, "/betting/batch/{match_id}").permitAll()
             httpRequests.requestMatchers(HttpMethod.POST, "/betting/batch/cancel/{match_id}").hasAnyRole(Authority.USER.name, Authority.STAFF.name)
 
             // server to server

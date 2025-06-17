@@ -42,7 +42,7 @@ class BettingBatchJobConfig(
         transactionManager: PlatformTransactionManager,
     ): Step {
         return StepBuilder("bettingStep", jobRepository)
-            .chunk<Betting, BettingResult>(50)
+            .chunk<Betting, BettingResult>(1000)
             .transactionManager(transactionManager)
             .reader(bettingReader.bettingReader(null))
             .processor(bettingProcessor)

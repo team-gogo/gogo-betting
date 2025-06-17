@@ -70,24 +70,24 @@ class BettingWriter(
             )
         )
 
-        val successList = accumulatedItems.filter { it.isPredicted }
-            .map {
-                val studentId = bettingRepository.findByIdOrNull(it.bettingId)!!.studentId
-                StudentBettingDto(studentId, it.earnedPoint)
-            }
-
-        val event = MatchBatchEvent(
-            id = UUID.randomUUID().toString(),
-            batchId = batchId,
-            matchId = matchId,
-            victoryTeamId = winTeamId,
-            aTeamScore = aTeamScore,
-            bTeamScore = bTeamScore,
-            students = successList
-        )
-
-        log.info("published betting batch application event: {}", event.id)
-        batchPublisher.publishBettingBatchEvent(event)
+//        val successList = accumulatedItems.filter { it.isPredicted }
+//            .map {
+//                val studentId = bettingRepository.findByIdOrNull(it.bettingId)!!.studentId
+//                StudentBettingDto(studentId, it.earnedPoint)
+//            }
+//
+//        val event = MatchBatchEvent(
+//            id = UUID.randomUUID().toString(),
+//            batchId = batchId,
+//            matchId = matchId,
+//            victoryTeamId = winTeamId,
+//            aTeamScore = aTeamScore,
+//            bTeamScore = bTeamScore,
+//            students = successList
+//        )
+//
+//        log.info("published betting batch application event: {}", event.id)
+//        batchPublisher.publishBettingBatchEvent(event)
     }
 
     override fun write(items: Chunk<out BettingResult>) {
